@@ -28,7 +28,7 @@ import javax.swing.JOptionPane;
  * - Julio
  */
 
-public class SemanticAnalyzer {
+public class AnalizadorSemantico {
 
     private static List<Token>     tokens = new ArrayList<Token>();
     private static List<Token>     tokensInVarSection = new ArrayList<Token>();
@@ -212,8 +212,8 @@ public class SemanticAnalyzer {
             // ¡Se completó el análisis con éxito! 🥳
             JOptionPane.showMessageDialog(null, "Análisis semántico completado");
             
-            writeTableToFile(SemanticAnalyzer.symbolsTable, symbolsTableFile);
-            writeTableToFile(SemanticAnalyzer.addressesTable, addressesTableFile);
+            writeTableToFile(AnalizadorSemantico.symbolsTable, symbolsTableFile);
+            writeTableToFile(AnalizadorSemantico.addressesTable, addressesTableFile);
             writeTableToFile(buildTextTokensTable(tokens), tokensTableFile);
 
         } catch (Exception e) {
