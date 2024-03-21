@@ -47,7 +47,7 @@ public class Token {
         this.numLinea = numLinea;
     }
 
-    public boolean isIdentifier() {
+    public boolean isIdentificador() {
         return posicionTabla == -2  ;
     }
 

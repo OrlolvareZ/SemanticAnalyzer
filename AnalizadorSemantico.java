@@ -111,13 +111,13 @@ public class AnalizadorSemantico {
 
                 index++;
 
-                if(!token.isIdentifier())
+                if(!token.isIdentificador())
                 {
                     continue;
                 }
 
                 // Identificador de programa
-                if(token.getToken() == Syntax.GENERAL_ID)
+                if(token.getToken() == Sintaxis.GENERAL_ID)
                 {
                     // Guardamos el ámbito actual
                     ambits.push(token.getLexema());
@@ -170,7 +170,7 @@ public class AnalizadorSemantico {
 
                 index++;
 
-                if(!token.isIdentifier())
+                if(!token.isIdentificador())
                 {
                     continue;
                 }
@@ -187,7 +187,7 @@ public class AnalizadorSemantico {
                 tokens.get(index).setPosicionTabla(tablePositions.get(token.getLexema()));
 
                 // Revisa la validez de las asignaciones
-                if(tokens.get(index+1).getToken() == Syntax.ASSIGN_OP){
+                if(tokens.get(index+1).getToken() == Sintaxis.ASIGN_OP){
 
                     if(!assignmentIsValid(token.getToken(), index)){
                         JOptionPane.showMessageDialog(null, "Error semántico: La asignación no es válida");
@@ -198,9 +198,9 @@ public class AnalizadorSemantico {
                 // Revisa la validez de las condiciones
                 int blockToken = tokens.get(index-2).getToken();
                 if(
-                    blockToken == Syntax.IF
-                    || blockToken == Syntax.WHILE
-                    || blockToken == Syntax.UNTIL
+                    blockToken == Sintaxis.IF
+                    || blockToken == Sintaxis.MIENTRAS
+                    || blockToken == Sintaxis.HASTA
                 ){
                     if(!booleanExpressionIsValid(token.getToken(), index, blockToken)){
                         JOptionPane.showMessageDialog(null, "Error semántico: La condición no es válida");
@@ -227,7 +227,7 @@ public class AnalizadorSemantico {
 
         List<Integer> foundTokens = new ArrayList<Integer>();
 
-        if(structure == Syntax.IF || structure == Syntax.WHILE){
+        if(structure == Sintaxis.IF || structure == Sintaxis.MIENTRAS){
 
             for(int i = index; i < tokens.size(); i++) {
 
@@ -235,8 +235,8 @@ public class AnalizadorSemantico {
 
                 // La expresión booleana termina al encontrar el patrón:
                 // ...) { entonces inicio... <-
-                if(tokens.get(i+3).getToken() == Syntax.BEGIN){
-                    return Syntax.logicalAndRelationalOperators.stream().anyMatch(foundTokens::contains);
+                if(tokens.get(i+3).getToken() == Sintaxis.INICIO){
+                    return Sintaxis.logicalAndRelationalOperators.stream().anyMatch(foundTokens::contains);
                 }
 
             }
@@ -253,8 +253,8 @@ public class AnalizadorSemantico {
                 // hasta (
                 //  ...
                 // ); <-
-                if(tokens.get(i+2).getToken() == Syntax.SEMICOLON){
-                    return Syntax.logicalAndRelationalOperators.stream().anyMatch(foundTokens::contains);
+                if(tokens.get(i+2).getToken() == Sintaxis.PUNTOCOMA){
+                    return Sintaxis.logicalAndRelationalOperators.stream().anyMatch(foundTokens::contains);
                 }
 
             }
@@ -294,7 +294,7 @@ public class AnalizadorSemantico {
 
             // Dado el final de la expresión, revisa que los tokens encontrados
             // generen una expresión del tipo esperado
-            if(_token.getToken() == Syntax.SEMICOLON){
+            if(_token.getToken() == Sintaxis.PUNTOCOMA){
                 
                 int currentVar = foundTokens.get(0);
                 String currentVarDataType = getAllowedDataType(currentVar);
@@ -344,7 +344,7 @@ public class AnalizadorSemantico {
         for(int i = index; i < tokensInVarSection.size(); i++){
 
             // Observa los tokens de la declaración hasta finalizar la expresión
-            if(tokensInVarSection.get(i).getToken() == Syntax.SEMICOLON){
+            if(tokensInVarSection.get(i).getToken() == Sintaxis.PUNTOCOMA){
 
                 // Revisa el tipo de dato anunciado al final de la declaración...
                 String announcedDataType = tokensInVarSection.get(i-1).getLexema();
@@ -370,7 +370,7 @@ public class AnalizadorSemantico {
 
             // Si el token es "inicio", cambiamos el destino de los tokens
             // subsecuentes a la sección de cuerpo
-            if(token.getToken() == Syntax.BEGIN){
+            if(token.getToken() == Sintaxis.INICIO){
                 currentTargetSection = tokensInBodySection;
             }
 
@@ -387,13 +387,13 @@ public class AnalizadorSemantico {
      */
     public static String getAllowedDataType(int token){
 
-        if (token == Syntax.INT_ID) {
+        if (token == Sintaxis.INT_ID) {
             return "entero";
-        } else if (token == Syntax.REAL_ID) {
+        } else if (token == Sintaxis.REAL_ID) {
             return "real";
-        } else if (token == Syntax.STRING_ID) {
+        } else if (token == Sintaxis.STRING_ID) {
             return "cadena";
-        } else if (token == Syntax.BOOLEAN_ID) {
+        } else if (token == Sintaxis.BOOLEANO_ID) {
             return "logico";
         } else {
             return "null";
@@ -409,13 +409,13 @@ public class AnalizadorSemantico {
      */
     public static String getIdentifierDefaultValue(int tokenId){
         
-        if (tokenId == Syntax.INT_ID) {
+        if (tokenId == Sintaxis.INT_ID) {
             return "0";
-        } else if (tokenId == Syntax.REAL_ID) {
+        } else if (tokenId == Sintaxis.REAL_ID) {
             return "0.0";
-        } else if (tokenId == Syntax.STRING_ID) {
+        } else if (tokenId == Sintaxis.STRING_ID) {
             return "null";
-        } else if (tokenId == Syntax.BOOLEAN_ID) {
+        } else if (tokenId == Sintaxis.BOOLEANO_ID) {
             return "true";
         } else {
             return "null";
