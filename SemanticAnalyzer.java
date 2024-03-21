@@ -46,7 +46,6 @@ public class SemanticAnalyzer {
                 symbolsTableFile.delete();
                 addressesTableFile.delete();
                 tokensTableFile.delete();
-                // JOptionPane.showMessageDialog(null, "Se eliminaron los archivos anteriores");
             }
 
             // Read tokens from file
@@ -93,7 +92,7 @@ public class SemanticAnalyzer {
             // Aux index for looking at tokens ahead
             int index = -1;
 
-            Map<String, Integer> numValue = new HashMap<String, Integer>();
+            Map<String, Integer> tablePositions = new HashMap<String, Integer>();
 
             for(Token token : tokensInVarSection){
 
@@ -132,7 +131,7 @@ public class SemanticAnalyzer {
 
                     addRowToSymbolsTable(token.getLexema(), token.getToken(), getIdentifierDefaultValue(token.getToken()), "Main", variables.size() - 1);
                     
-                    numValue.put(token.getLexema(), variables.size()-1);
+                    tablePositions.put(token.getLexema(), variables.size()-1);
                     
                     token.setPosicionTabla(variables.size()-1);
                     
@@ -158,7 +157,7 @@ public class SemanticAnalyzer {
                 else
                 {
                     // For known identifiers, set their known position in the table
-                    tokens.get(index).setPosicionTabla(numValue.get(token.getLexema()));
+                    tokens.get(index).setPosicionTabla(tablePositions.get(token.getLexema()));
 
                     // Handle assignments
                     if(tokens.get(index+1).getToken() == Syntax.ASSIGN_OP){
